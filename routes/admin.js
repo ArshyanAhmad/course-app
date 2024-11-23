@@ -92,8 +92,15 @@ router.post("/courses", adminMiddleware, async (req, res, next) => {
   }
 });
 
-router.get("/courses", adminMiddleware, (req, res) => {
+router.get("/courses", adminMiddleware, async (req, res, next) => {
   // Implement fetching all courses logic
+
+  try {
+    const courses = await Course.find({});
+    res.json(new ApiResponse(200, courses, "All course"));
+  } catch (error) {
+    next(new ApiError(400, "course not found"));
+  }
 });
 
 module.exports = router;
